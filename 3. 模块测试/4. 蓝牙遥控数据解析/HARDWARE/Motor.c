@@ -32,8 +32,8 @@ void Motor_Init()
 	TIM_TimeBaseStructInit(&TIM_TimeBaseInitStructure);			//初始化默认结构体
     TIM_TimeBaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
     TIM_TimeBaseInitStructure.TIM_CounterMode = TIM_CounterMode_Up;
-	TIM_TimeBaseInitStructure.TIM_Prescaler = 720-1;	//72M/720 = 100KHz
-    TIM_TimeBaseInitStructure.TIM_Period = 1000-1;		//72M/720/1000 = 100Hz = 0.01s
+	TIM_TimeBaseInitStructure.TIM_Prescaler = 72-1;		//72M/720 = 100KHz
+    TIM_TimeBaseInitStructure.TIM_Period = 500-1;		//72M/720/1000 = 100Hz = 0.01s
     TIM_TimeBaseInitStructure.TIM_RepetitionCounter = 0;
 	
 	TIM_TimeBaseInit(timMOTOR_AB,&TIM_TimeBaseInitStructure);
@@ -44,7 +44,7 @@ void Motor_Init()
     TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
     TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
     TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
-    TIM_OCInitStructure.TIM_Pulse = 1000;    //CCR
+    TIM_OCInitStructure.TIM_Pulse = 0;    //CCR
 	
 	TIM_OC1Init(timMOTOR_AB,&TIM_OCInitStructure);
     TIM_OC2Init(timMOTOR_AB,&TIM_OCInitStructure);

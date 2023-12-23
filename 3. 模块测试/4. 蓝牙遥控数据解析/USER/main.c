@@ -20,6 +20,7 @@ STBY1:PB4    STBY2:PB9
 #include "usart.h"
 #include "led.h"
 #include "motor.h"
+#include "control.h"
 
 extern u8 mode_flag;	//³õÊ¼Îª0
 
@@ -33,20 +34,11 @@ int main(void)
 	USART1_Init(115200);	//printf
 	USART2_Init(9600);		//BT06
 	Motor_Init();
-	delay_ms(1000);
-	delay_ms(1000);
-	delay_ms(1000);
 	
 	while (1)
 	{
-		if(mode_flag == 1)
-		{
-			motor_test();
-		}
-		else
-		{
-			Car_Stop();
-		}
+		//printf("11111\r\n");
+		Control();
 	}
 }
 

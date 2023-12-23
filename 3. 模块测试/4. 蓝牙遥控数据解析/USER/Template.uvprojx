@@ -569,6 +569,11 @@
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\Motor.c</FilePath>
             </File>
+            <File>
+              <FileName>control.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\control.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -8,7 +8,7 @@
 
 
 
-
+//Ñ­¼£´«¸ÐÆ÷£¨TCRT5000£©
 void TCRT5000_Init(void);
 void Tcrt_Text(void);
 
