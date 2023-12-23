@@ -1,0 +1,169 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<title>麦轮小车制作详解</title>
+<link rel="stylesheet" type="text/css" href="http://#" />         <!--可引用外部css-->
+<script type="text/javascript" src="http://#" ></script>          <!--可引用外部JS，以及jquery等库-->
+                                                                  <!-- 各种JS库的引用地址：www.bootcdn.cn -->
+<script>
+        /* 自写js */
+</script>
+<style>
+        /* 自写css */
+        #photosize{
+            width: 267px;
+            height: 154px ;
+        }
+        #photosize img{
+            width: 100% ;
+            height: 100% ;
+            display: block ;
+        }
+        /*编写li的排版*/
+        /*ul{*/
+        /*    width: 500px;*/
+        /*    margin: 200px auto;*/
+        /*    border: 10px solid red;*/
+        /*    overflow: hidden;*/
+        /*}*/
+ 
+ 
+        /*ul li{*/
+        /*    float: left;*/
+        /*    list-style: none;*/
+        /*    width: 92px;*/
+        /*    height: 100px;*/
+        /*    border-right: 10px solid blue;*/
+        /*    border-bottom: 10px solid blue;*/
+        /*    margin-bottom: -10px;*/
+        /*}*/
+ 
+ 
+        /*li:nth-child(5)~li{*/
+        /*    padding-top: 10px;*/
+        /*}*/
+ 
+        /*li:nth-child(5n){*/
+        /*    border-right: none;*/
+        /*}*/
+        
+        /*ul{*/
+        /*    width: 510px;*/
+        /*    margin: 200px auto;*/
+        /*    border-top: 10px solid red;*/
+        /*    border-left: 10px solid red;*/
+        /*    overflow: hidden;*/
+        /*}*/
+ 
+        /*li{*/
+        /*    float: left;*/
+        /*    list-style: none;*/
+        /*    width: 92px;*/
+        /*    height: 100px;*/
+        /*    border-right: 10px solid blue;*/
+        /*    border-bottom: 10px solid blue;*/
+        /*}*/
+        #myul li{
+    float:left;
+    width:300px;
+    } 
+</style>
+
+</head>
+<body>
+        
+        <h1 style="text-align:center">把头扎进沙漠，发现沙子下面是星辰大海</h1>
+        <div style="text-align:center">
+        <h3>全栈工程师的基本要素:a.熟读IC圣经 b.不怕困难，勇敢冲 c.不惧失败</h3>
+        </div>
+        <h2 class="font-da">下面是麦轮小车的简介：</h2>
+        <h3>材料准备：</h3>
+        <h4>小车方面：超声波模块&nbsp;电机驱动模块&nbsp;蓝牙模块&nbsp;灯珠&nbsp;无线模块&nbsp;迷你降压模块&nbsp;电机模块&nbsp;电机支架&nbsp;麦轮和联轴
+        </h4>
+        <h4>遥控器方面：Coled屏&nbsp;蓝牙模块&nbsp;无线模块&nbsp;MPU6050模块&nbsp;PS4摇杆&nbsp;PS4摇杆帽</h4>
+        
+        <h3>下面是各元器件薅羊毛的链接，全新元器件真的受不了！！！！！</h3>
+        <h4>小车方面</h4>
+        <ul id="myul" style="width:1200px;background:#eee" class="focus-ul clearfix">
+                        <li>
+                                <a href="https://mobile.yangkeduo.com/goods2.html?goods_id=258820562729&page_from=23&pxq_secret_key=3625TL7UBK35TA7FFXMIOOUZIOANBYJYV33NWMSHNT4BQQPZREPA&share_uin=MVB7OQK6HORYFP66EN3HMVZA24_GEXDA&refer_share_id=196f0abb66484fed9048824cb845c854&refer_share_uin=MVB7OQK6HORYFP66EN3HMVZA24_GEXDA&refer_share_channel=copy_link&refer_share_form=text" target="_blank">
+                    <div ><div id="photosize"><img src="https://tse3-mm.cn.bing.net/th/id/OIP-C.217PxLM2Nypg0Hy3F8rMGAHaHa?w=202&h=202&c=7&r=0&o=5&dpr=2&pid=1.7" alt=""></div></div>
+                    <p>超声波模块</p>
+                </a>
+                            </li>
+                        <li>
+                                <a href="https://mobile.yangkeduo.com/goods1.html?goods_id=437321048683&page_from=23&pxq_secret_key=3625TL7UBK35TA7FFXMIOOUZIPO63QRHYGBEK6T3X6XV5677A22A&share_uin=MVB7OQK6HORYFP66EN3HMVZA24_GEXDA&refer_share_id=52fdca88ba86477996856f7c35bfbc70&refer_share_uin=MVB7OQK6HORYFP66EN3HMVZA24_GEXDA&refer_share_channel=copy_link&refer_share_form=text" target="_blank">
+                    <div><div id="photosize"><img src="https://img14.360buyimg.com/imgzone/jfs/t1/192958/30/12313/119549/60e6b91fE52186934/8466e9e10b81fda7.jpg" alt=""></div></div>
+                    <p>8833电机驱动模块</p>
+                </a>
+                            </li>
+                        <li>
+                                <a href="https://mobile.yangkeduo.com/goods.html?goods_id=479859533233&page_from=23&pxq_secret_key=3625TL7UBK35TA7FFXMIOOUZIOQVCWNIO53ZSU3AL4VXEMD3XLFA&share_uin=MVB7OQK6HORYFP66EN3HMVZA24_GEXDA&refer_share_id=61486369299e43b58f40c526c74f7201&refer_share_uin=MVB7OQK6HORYFP66EN3HMVZA24_GEXDA&refer_share_channel=copy_link&refer_share_form=text" target="_blank">
+                    <div><div id="photosize"><img src="https://t14.baidu.com/it/u=841478496,2373894176&fm=224&app=112&size=w931&n=0&f=JPEG&fmt=auto?sec=1686070800&t=2ba085b3de3d7446d99789ca2ebdc9a0" alt=""></div></div>
+                    <p>蓝牙模块</p>
+                </a>
+                            </li>
+                        <li>
+                                <a href="https://mobile.yangkeduo.com/goods2.html?goods_id=405136541255&page_from=23&pxq_secret_key=3625TL7UBK35TA7FFXMIOOUZIP5CJS6ZRCQQLIG6NCOLAMGZ6VWQ&share_uin=MVB7OQK6HORYFP66EN3HMVZA24_GEXDA&refer_share_id=3674803481a34387a8bafdfde7853a19&refer_share_uin=MVB7OQK6HORYFP66EN3HMVZA24_GEXDA&refer_share_channel=copy_link&refer_share_form=text" target="_blank">
+                    <div><div id="photosize"><img src="https://img0.baidu.com/it/u=1668969140,4147148586&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1686070800&t=53f4a2de08bf015a39bf66ea6a62c448" alt=""></div></div>
+                    <p>ws2812B灯珠</p>
+                </a>
+                            </li>
+                            <li>
+                                <a href="https://mobile.yangkeduo.com/goods.html?goods_id=440337057298&page_from=23&pxq_secret_key=3625TL7UBK35TA7FFXMIOOUZINVBYVKB5ZMLPDGXXG2D7MICABOQ&share_uin=MVB7OQK6HORYFP66EN3HMVZA24_GEXDA&refer_share_id=927c9d26ae2141b393c5571fdf10d24f&refer_share_uin=MVB7OQK6HORYFP66EN3HMVZA24_GEXDA&refer_share_channel=copy_link&refer_share_form=text" target="_blank">
+                    <div><div id="photosize"><img src="https://img0.baidu.com/it/u=1644824329,741862987&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1686070800&t=16a63fda69d1e22478534d06a6d637e1" alt=""></div></div>
+                    <p>无线模块</p>
+                    
+                     <li>
+                                <a href="https://mobile.yangkeduo.com/goods2.html?goods_id=354613159853&page_from=23&pxq_secret_key=3625TL7UBK35TA7FFXMIOOUZIPNQY74BOQ45EHTE3AB4TIXANMDA&share_uin=MVB7OQK6HORYFP66EN3HMVZA24_GEXDA&refer_share_id=cca427d8f9404d2cb13bce799859ca5c&refer_share_uin=MVB7OQK6HORYFP66EN3HMVZA24_GEXDA&refer_share_channel=copy_link&refer_share_form=text" target="_blank">
+                    <div><div id="photosize"><img src="https://t13.baidu.com/it/u=4263425205,1674512254&fm=224&app=112&size=w931&n=0&f=JPEG&fmt=auto?sec=1686070800&t=8f4731dc135878f6fa66fed623de654f" alt=""></div></div>
+                    <p>迷你降压模块5V3A</p>
+                </a>
+                            </li>
+                             <li>
+                                <a href="https://mobile.yangkeduo.com/goods1.html?goods_id=105771729578&page_from=0&pxq_secret_key=3625TL7UBK35TA7FFXMIOOUZINGWWVPYB6PZCP3POSZMGOFU44KQ&share_uin=MVB7OQK6HORYFP66EN3HMVZA24_GEXDA&refer_share_id=09f338ba4c3345aea4d83010c8ebcb32&refer_share_uin=MVB7OQK6HORYFP66EN3HMVZA24_GEXDA&refer_share_channel=copy_link&refer_share_form=text" target="_blank">
+                    <div><div id="photosize"><img src="https://img0.baidu.com/it/u=678030645,3706399584&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1686070800&t=f726f514cac67529f359f7260e30dbf4" alt=""></div></div>
+                    <p>N20降速电机</p>
+                </a>
+                            </li>
+                            <li>
+                                <a href="https://mobile.yangkeduo.com/goods1.html?goods_id=483108080408&page_from=23&pxq_secret_key=3625TL7UBK35TA7FFXMIOOUZIM7DULD7E27EIG2E4EVDQLUMANTA&share_uin=MVB7OQK6HORYFP66EN3HMVZA24_GEXDA&refer_share_id=bfc0011492a1418da89f60c62b46dd67&refer_share_uin=MVB7OQK6HORYFP66EN3HMVZA24_GEXDA&refer_share_channel=copy_link&refer_share_form=text" target="_blank">
+                    <div><div id="photosize"><img src="https://t7.baidu.com/it/u=88010617,372357499&fm=218&app=137&size=f242,150&n=0&f=JPEG&fmt=auto?s=AB82ED0280E476A42F30C917010090E3&sec=1686070800&t=d5dfc18efa81a1f582821dce7c80a2c1" alt=""></div></div>
+                    <p>48mm麦轮和3mm联轴器</p>
+                </a>
+                            </li>
+                    </ul>
+                    <h4>遥控器方面</h4>
+         <ul id="myul" style="width:1200px;background:#eee" class="focus-ul clearfix">
+                        <li>
+                                <a href="https://mobile.yangkeduo.com/goods1.html?goods_id=415652754827&page_from=23&pxq_secret_key=3625TL7UBK35TA7FFXMIOOUZIP3HSITJMTDW7T3BR5AVDVXAXERA&share_uin=MVB7OQK6HORYFP66EN3HMVZA24_GEXDA&refer_share_id=205bf72279c146ee8bd3225cbb17b626&refer_share_uin=MVB7OQK6HORYFP66EN3HMVZA24_GEXDA&refer_share_channel=copy_link&refer_share_form=text" target="_blank">
+                    <div ><div id="photosize"><img src="http://www.zjydisplay.com/d/file/p/2021/01-14/4cfa9bb03948c8c047d0cb221fbeb9f9.jpg" alt=""></div></div>
+                    <p>0.96寸oled屏幕</p>
+                </a>
+                            </li>
+                        <li>
+                                <a href="https://mobile.yangkeduo.com/goods1.html?goods_id=479859533233&page_from=23&pxq_secret_key=3625TL7UBK35TA7FFXMIOOUZIPKXPEXNAIU2GP4QM5M446H3YFVQ&share_uin=MVB7OQK6HORYFP66EN3HMVZA24_GEXDA&refer_share_id=54cccff2a8cb4f0aba89213da669ab31&refer_share_uin=MVB7OQK6HORYFP66EN3HMVZA24_GEXDA&refer_share_channel=copy_link&refer_share_form=text" target="_blank">
+                    <div><div id="photosize"><img src="https://file4.renrendoc.com/view/1f0e6551a4ab404d39f667fba0ab541b/1f0e6551a4ab404d39f667fba0ab541b1.gif" alt=""></div></div>
+                    <p>JDY-23蓝牙模块</p>
+                </a>
+                            </li>
+                        <li>
+                                <a href="https://mobile.yangkeduo.com/goods2.html?goods_id=440337057298&page_from=23&pxq_secret_key=3625TL7UBK35TA7FFXMIOOUZIPJAKT3M66JHWWA64IDPTPQKSQPA&share_uin=MVB7OQK6HORYFP66EN3HMVZA24_GEXDA&refer_share_id=56ff490d6515461f8129191b4f70c05a&refer_share_uin=MVB7OQK6HORYFP66EN3HMVZA24_GEXDA&refer_share_channel=copy_link&refer_share_form=text" target="_blank">
+                    <div><div id="photosize"><img src="https://t9.baidu.com/it/u=711419000,3700798440&fm=74&app=80&size=f256,256&n=0&f=JPEG&fmt=auto?s=0B28DD02BBD563E7473CAD16030050E3&sec=1687021200&t=4f425ed5a93d5fc433b1aeec3f68b9cf" alt=""></div></div>
+                    <p>NRF24L01无线模块</p>
+                </a>
+                            </li>
+                        <li>
+                                <a href="https://mobile.yangkeduo.com/goods1.html?goods_id=468013701843&page_from=23&pxq_secret_key=3625TL7UBK35TA7FFXMIOOUZIMZJZNNX35VNEYDTZZUIKSMUFR2Q&share_uin=MVB7OQK6HORYFP66EN3HMVZA24_GEXDA&refer_share_id=7af0c0b5d5454b9aba82170b482d8391&refer_share_uin=MVB7OQK6HORYFP66EN3HMVZA24_GEXDA&refer_share_channel=copy_link&refer_share_form=text" target="_blank">
+                    <div><div id="photosize"><img src="https://img2.baidu.com/it/u=2264397490,3154733833&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1687021200&t=5f9b398fde8d6d4dc6f4aedb2c9c424f" alt=""></div></div>
+                    <p>MPU6050模块</p>
+                </a>
+                            </li>
+                            <li>
+                                <a href="https://mobile.yangkeduo.com/goods.html?goods_id=483000607187&page_from=23&pxq_secret_key=3625TL7UBK35TA7FFXMIOOUZIPQCF46NJBID7UGOSNI6ZVGNEGHA&share_uin=MVB7OQK6HORYFP66EN3HMVZA24_GEXDA&refer_share_id=a245f0d0f54d406d8c2dbdb5e3889c4b&refer_share_uin=MVB7OQK6HORYFP66EN3HMVZA24_GEXDA&refer_share_channel=copy_link&refer_share_form=text"_blank">
+                    <div><div id="photosize"><img src="https://img.alicdn.com/i1/2829719958/O1CN01Jp71PJ2NQoXwSUA92_!!2829719958.jpg" alt=""></div></div>
+                    <p>PS4摇杆，遥感帽(直接问店家就行)</p>
+                    </ul>
+        <EMBED SRC="https://b23.tv/Eg416BQ" autostart=false loop=false width=1200 height=800>
+            </a>
+             <h1>加油吧骚年！！！！！</a>
+</body>
+</html>
