@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "*.s": "arm",
+        "led.h": "c",
+        "delay.h": "c",
+        "beep.h": "c"
+    }
+}
