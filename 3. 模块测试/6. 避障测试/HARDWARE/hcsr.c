@@ -130,7 +130,7 @@ float Hcsr04GetLength(void)
     int i = 0;
     float lengthTemp = 0;
     float sum = 0;
-    while (i != 5)
+//    while (i != 5)
     {
         TRIG_Send = 1;
         delay_us(20);				//10us以上的脉冲触发信号(高电平)
@@ -142,9 +142,9 @@ float Hcsr04GetLength(void)
         CloseTimerForHc();		//结束停止定时器
         t = GetEchoTimer();		//获取TIM4内部计数器的值（每次计数耗时1us [72M/72]）
         lengthTemp = ((float)t / 58.0);//lengthTemp：cm	t：us	lengthTemp = 340m/s*100/1000 000 * t / 2 = t/58.83
-        sum = lengthTemp + sum;	//5次求和
+//        sum = lengthTemp + sum;	//5次求和
     }
-    lengthTemp = sum / 5.0;		//测5次取平均值
+//    lengthTemp = sum / 5.0;		//测5次取平均值 //严重影响检测速度 故取消
     return lengthTemp;
 }
 

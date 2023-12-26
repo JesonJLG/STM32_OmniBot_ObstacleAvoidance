@@ -39,8 +39,8 @@ void Bluetooth_Mode(void)
 {
     if (mode_flag == 1)		    APP_Joy_Mode();		//APP摇杆模式
     else if (mode_flag == 2)	APP_Gravity_Mode();	//APP重力模式
-    else if (mode_flag == 3)	Evadible_Mode();
-    //	else if(mode_flag==4)	Follow_Mode();
+    else if (mode_flag == 3)	Evadible_Mode();	//小车避障模式
+//    else if(mode_flag==4)		Follow_Mode();		//小车跟随模式
     else
     {
         printf("mode_flag:%d\r\n", mode_flag);
@@ -56,16 +56,35 @@ void Bluetooth_Mode(void)
 void Evadible_Mode(void)
 {
     float Dis;
+    static char tmpflag = 0;
     Dis = Hcsr04GetLength();//超声波模块获取距离
-    Car_Forward(200);//前进
+    Car_Forward(350);//前进
 
     if (Dis <= 15)
     {
-        Car_Backward(300);//后退
-        delay_ms(400);
-        Car_TurnLeft(300);//左转
-        delay_ms(400);
+        tmpflag = 1;
+        Car_Backward(350);//后退
+        delay_ms(500);
+        Car_TurnLeft(350);//左转
+        delay_ms(500);
     }
+    else
+    {
+        if(tmpflag == 1)
+        {
+            if(Dis > 150)
+            {
+                Car_Backward(350);//后退
+                delay_ms(500);
+                Car_TurnLeft(350);//左转
+                delay_ms(500);
+            }
+        }
+        tmpflag = 0;
+    }
+
+
+
 }
 
 /**************************************************
@@ -74,20 +93,19 @@ void Evadible_Mode(void)
 入口参数：无
 返回参数：无
 ***************************************************/
-//void Follow_Mode(void)
-//{
-//	float Dis;
-//	Dis=Hcsr04GetLength();//超声波模块获取距离
-//	if(Dis<=10)
-//	{
-//		backward(200);//后退
-//	}
-//	else if(Dis<=30&&Dis>=20)
-//	{
-//		forward(200);//前进
-//	}
-//	else Motion_State(ON);
-//}
+void Follow_Mode(void)
+{
+    float Dis;
+    Dis=Hcsr04GetLength();//超声波模块获取距离
+    if(Dis<=10)
+    {
+        Car_Backward(400);//后退
+    }
+    else if(Dis<=30&&Dis>=20)
+    {
+        Car_Forward(400);//前进
+    }
+}
 
 /**************************************************
 函数名称：APP_Joy_Mode(void)
@@ -118,7 +136,7 @@ void APP_Joy_Mode(void)
     //	printf("Rx:%d	", Joy_Rx);
     //	printf("Ry:%d	", Joy_Ry);
     //	printf("\r\n");
-        /*------------摇杆映射正反转-------------*/
+    /*------------摇杆映射正反转-------------*/
     Map_Lx = Map(Joy_Lx, 10, 90, -127, 127);
     Map_Ly = Map(Joy_Ly, 10, 90, -127, 127);
     Map_Rx = Map(Joy_Rx, 10, 90, -127, 127);
@@ -143,16 +161,16 @@ void APP_Joy_Mode(void)
     pwm4 = Map(pwm4, -127, 127, -1000, 1000);
 
     /*------------过滤低占空比（因为带不动电机）-------------*/
-    if (pwm1 < 200 && pwm1 >-200)		pwm1 = 0;
-    if (pwm2 < 200 && pwm2 >-200)		pwm2 = 0;
-    if (pwm3 < 200 && pwm3 >-200)		pwm3 = 0;
-    if (pwm4 < 200 && pwm4 >-200)		pwm4 = 0;
+    if (pwm1 < 200 && pwm1 >-200)	pwm1 = 0;
+    if (pwm2 < 200 && pwm2 >-200)	pwm2 = 0;
+    if (pwm3 < 200 && pwm3 >-200)	pwm3 = 0;
+    if (pwm4 < 200 && pwm4 >-200)	pwm4 = 0;
 
     /*------------限制正向最大占空比-------------*/
-    if (pwm1 > 1000)		pwm1 = 1000;
-    if (pwm2 > 1000)		pwm2 = 1000;
-    if (pwm3 > 1000)		pwm3 = 1000;
-    if (pwm4 > 1000)		pwm4 = 1000;
+    if (pwm1 > 1000)	pwm1 = 1000;
+    if (pwm2 > 1000)	pwm2 = 1000;
+    if (pwm3 > 1000)	pwm3 = 1000;
+    if (pwm4 > 1000)	pwm4 = 1000;
 
     /*------------限制反向最大占空比-------------*/
     if (pwm1 < -1000)	pwm1 = -1000;
