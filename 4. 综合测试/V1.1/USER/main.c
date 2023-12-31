@@ -33,9 +33,17 @@ STBY1:PB4    STBY2:PB9
 //extern char Pwm_RxPacket[20];	//"P[...]\r\n"	Pwm_RxPacket[0]为pwm_limit
 u8 t;
 u8 temperature, humidity;
-u16 cnt;
+int cnt;				//对射红外外部中断次数
+int girdCount = 20;		//码盘格子数
+float lap;				//轮子圈数
+float perimeter = 8.1;	//轮子周长 2.575cm * 3.14 ≈ 8.1cm
+float distance;			//路程
+float speed;			//速度
+int time;
 extern char Pwm_RxFlag;
+
 void motor_test(void);
+void analyzeIRSensorData_1s(void);
 
 int main(void)
 {
@@ -79,7 +87,7 @@ int main(void)
 //			printf("cnt:%d\r\n", cnt);
 			Serial_Printf("*T%d*", temperature);
 			Serial_Printf("*H%d*", humidity);
-			Serial_Printf("*D%d*", cnt);
+//			Serial_Printf("*D%d*", cnt);
 		}
 		delay_ms(10);
 		t++;
@@ -88,24 +96,29 @@ int main(void)
 			t = 0;
 			LED0 = !LED0;	//LED不断闪烁
 		}
+//		analyzeIRSensorData_1s();
 	}
 }
 
-void motor_test(void)
+void analyzeIRSensorData_1s(void) 
 {
-	printf("电机测试\r\n");
-	Car_Forward(500);
-	delay_ms(1800);
-	Car_Backward(500);
-	delay_ms(1800);
-	Car_TransLeft(500);
-	delay_ms(1800);
-	Car_TransRight(500);
-	delay_ms(1800);
-	Car_TurnLeft(500);
-	delay_ms(1800);
-	Car_Stop();
-	delay_ms(1800);
-	Car_TurnRight(500);
-	delay_ms(1800);
+	if(time == 50)//20ms*50 = 1000ms = 1s
+	{
+		time = 0;
+		lap = (float)cnt / girdCount;	//多少圈
+		speed = lap * perimeter;		//速度cm/s
+//		Serial_Printf("*D%.2f*", speed);
+		Serial_Printf("*D1*");			//test
+	}
+}
+
+//TIM1更新中断函数	20ms一次
+void TIM1_UP_IRQHandler(void)
+{
+	if (TIM_GetITStatus(TIM1, TIM_IT_Update) == SET)
+	{
+		time ++;
+		analyzeIRSensorData_1s();
+		TIM_ClearITPendingBit(TIM1, TIM_IT_Update);
+	}
 }

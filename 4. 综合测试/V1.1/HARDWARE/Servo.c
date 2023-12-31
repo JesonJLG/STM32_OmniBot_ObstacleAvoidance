@@ -1,5 +1,12 @@
 #include "servo.h"
 
+/*************************************
+本模块兼具两个功能：
+1. PWM输出控制舵机
+2. 利用20ms的更新中断产生1s的定时中断，用于测速
+*************************************/
+//int time;
+
 void PWM_Init(void)
 {
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
@@ -21,6 +28,15 @@ void PWM_Init(void)
     TIM_TimeBaseInitStructure.TIM_Prescaler = 72 - 1;//PSC 72M/72/20 000 = 1000/20 = 50Hz = 0.02s = 20ms
     TIM_TimeBaseInitStructure.TIM_RepetitionCounter = 0;
     TIM_TimeBaseInit(SERVO_TIM, &TIM_TimeBaseInitStructure);
+	
+	TIM_ClearFlag(SERVO_TIM, TIM_FLAG_Update);		//清除计数器中断标志位
+	TIM_ITConfig(SERVO_TIM, TIM_IT_Update,ENABLE);	//配置中断输出控制
+	NVIC_InitTypeDef NVIC_InitStructure;
+	NVIC_InitStructure.NVIC_IRQChannel = TIM1_UP_IRQn;
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
+	NVIC_Init(&NVIC_InitStructure);
 
     TIM_OCInitTypeDef TIM_OCInitStructure;
     TIM_OCStructInit(&TIM_OCInitStructure);
@@ -52,4 +68,3 @@ void Servo_SetAngle(float Angle)
 {
     PWM_SetCompare1(Angle / 180 * 2000 + 500);
 }
-
