@@ -23,8 +23,8 @@ void Serial_Init(u32 bound)
     USART_InitTypeDef USART_InitStructure;
     NVIC_InitTypeDef NVIC_InitStructure;
 
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
 
     GPIO_InitStructure.GPIO_Pin = USART_TX;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
@@ -35,7 +35,7 @@ void Serial_Init(u32 bound)
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;	//浮空输入
     GPIO_Init(USART_PORT, &GPIO_InitStructure);
 
-    NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
+    NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
@@ -60,7 +60,7 @@ void Serial_Init(u32 bound)
 入口参数：无
 返回参数：无
 ***************************************************/
-void USART2_IRQHandler(void)
+void USART3_IRQHandler(void)
 {
     u8 RxData;
     static u8 t = 0, n1 = 0, n2 = 0, n3 = 0;	//计次 作为过滤标志位使用

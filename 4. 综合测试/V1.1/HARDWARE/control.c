@@ -56,6 +56,7 @@ void Control(void)
 void Bluetooth_Mode(void)
 {
     if (mode_flag == 1)		    APP_Joy_Mode();		//APP摇杆模式
+	else if (mode_flag == 2)	motor_test();	//测试电机
 //    else if (mode_flag == 2)	APP_Gravity_Mode();	//APP重力模式
 //    else if (mode_flag == 3)	Evadible_Mode();	//小车避障模式
 //    else if(mode_flag==4)		Follow_Mode();		//小车跟随模式
@@ -297,7 +298,25 @@ void Follow_Mode(void)
     }
 }
 
-
+void motor_test(void)
+{
+	printf("电机测试\r\n");
+	MotorD_SetSpeed(1,500);
+//	Car_Forward(500);
+//	delay_ms(1800);
+//	Car_Backward(500);
+//	delay_ms(1800);
+//	Car_TransLeft(500);
+//	delay_ms(1800);
+//	Car_TransRight(500);
+//	delay_ms(1800);
+//	Car_TurnLeft(500);
+//	delay_ms(1800);
+//	Car_Stop();
+//	delay_ms(1800);
+//	Car_TurnRight(500);
+//	delay_ms(1800);
+}
 
 /**************************************************
 函数名称：APP_Gravity_Mode(void)

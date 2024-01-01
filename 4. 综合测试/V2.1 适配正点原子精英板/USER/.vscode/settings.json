@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "*.s": "arm",
+        "led.h": "c",
+        "delay.h": "c",
+        "dht11.h": "c",
+        "sys.h": "c",
+        "oled.h": "c",
+        "oled_font.h": "c",
+        "beep.h": "c",
+        "stm32f10x.h": "c"
+    }
+}

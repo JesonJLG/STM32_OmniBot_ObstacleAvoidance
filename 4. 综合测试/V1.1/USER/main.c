@@ -42,7 +42,6 @@ float speed;			//速度
 int time;
 extern char Pwm_RxFlag;
 
-void motor_test(void);
 void analyzeIRSensorData_1s(void);
 
 int main(void)
@@ -60,9 +59,10 @@ int main(void)
 	BEEP_Ring();
 	Servo_Init();
 	Servo_SetAngle(90);
-	OLED_ShowString(1, 1, "Temp:");
-	OLED_ShowString(2, 1, "Humi:");
-	OLED_ShowString(3, 1, "cnt:");
+	OLED_ShowString(1, 1, "Temp:00");
+	OLED_ShowString(2, 1, "Humi:00");
+	OLED_ShowString(3, 1, "cnt:00");
+	printf("123\r\n");
 	
 	
 	while (DHT11_Init())	//DHT11初始化
@@ -75,13 +75,14 @@ int main(void)
 	while (1) 
 	{
 		Control();
+		analyzeIRSensorData_1s();
 		if (t % 10 == 0)			//每100ms读取一次
 		{
 			DHT11_Read_Data(&temperature, &humidity);	//读取温湿度值
 			cnt = CountSensor_Get();
 			OLED_ShowNum(1, 6, temperature, 2);
 			OLED_ShowNum(2, 6, humidity, 2);
-			OLED_ShowNum(3, 6, cnt, 4);
+			OLED_ShowNum(3, 6, cnt, 2);
 //			printf("temperature:%d\t", temperature);
 //			printf("humidity:%d\t", humidity);
 //			printf("cnt:%d\r\n", cnt);
@@ -96,29 +97,30 @@ int main(void)
 			t = 0;
 			LED0 = !LED0;	//LED不断闪烁
 		}
-//		analyzeIRSensorData_1s();
+		
 	}
 }
 
 void analyzeIRSensorData_1s(void) 
 {
-	if(time == 50)//20ms*50 = 1000ms = 1s
+	if(time >= 50)//20ms*50 = 1000ms = 1s
 	{
 		time = 0;
 		lap = (float)cnt / girdCount;	//多少圈
 		speed = lap * perimeter;		//速度cm/s
+		CountSensor_Clear();
 //		Serial_Printf("*D%.2f*", speed);
 		Serial_Printf("*D1*");			//test
 	}
 }
 
-//TIM1更新中断函数	20ms一次
+////TIM1更新中断函数	20ms一次
 void TIM1_UP_IRQHandler(void)
 {
 	if (TIM_GetITStatus(TIM1, TIM_IT_Update) == SET)
 	{
 		time ++;
-		analyzeIRSensorData_1s();
+//		analyzeIRSensorData_1s();
 		TIM_ClearITPendingBit(TIM1, TIM_IT_Update);
 	}
 }

@@ -3,71 +3,76 @@
 void Motor_Init()
 {
     /*------------RCC-------------*/
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
+//    RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA,ENABLE);
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB,ENABLE);
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2,ENABLE);
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3,ENABLE);
 
-    /*------------GPIO-------------*/
-    GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);
-    GPIO_PinRemapConfig(GPIO_FullRemap_TIM2, ENABLE);
+    /*------------AFIO-------------*/
+//	GPIO_PinRemapConfig(GPIO_FullRemap_TIM2, ENABLE);
+//	GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable , ENABLE);	//禁止JTAG功能，把PB3，PB4作为普通IO口使用
+//	RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
+//	GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);              
+//	DBGMCU->CR  &= ~((uint32_t)1<<5);   
+//	AFIO->MAPR = (AFIO->MAPR & ~((uint32_t)0x7 << 24)) | (2 << 24);     /*  PA15 PB3 PB4 */
 
+    /*------------GPIO-------------*/
     GPIO_InitTypeDef GPIO_InitStructure;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-    GPIO_InitStructure.GPIO_Pin = pinMOTOR_A1|pinMOTOR_A2|pinMOTOR_C1|pinMOTOR_C2|pinMOTOR_D1;
+    GPIO_InitStructure.GPIO_Pin = MOTORA_A1|MOTORA_A2;	//PB1、PB0
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(GPIOB,&GPIO_InitStructure);
+    GPIO_Init(MOTOR_PORT_A,&GPIO_InitStructure);
 
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-    GPIO_InitStructure.GPIO_Pin = pinMOTOR_B1|pinMOTOR_B2|pinMOTOR_D2;
+    GPIO_InitStructure.GPIO_Pin = MOTORB_B1|MOTORB_B2|MOTORC_C1|MOTORC_C2|MOTORD_D1|MOTORD_D2;	//PA0、PA1、PA2、PA3、PA6、PA7
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(GPIOA,&GPIO_InitStructure);
-
-    /*------------TIM-------------*/
-    TIM_InternalClockConfig(timMOTOR_AB);
-    TIM_InternalClockConfig(timMOTOR_CD);
-
+    GPIO_Init(MOTOR_PORT_BCD,&GPIO_InitStructure);
+	
+	/*------------TIM-------------*/
+    TIM_InternalClockConfig(MOTOR_TIM_AB);
+	TIM_InternalClockConfig(MOTOR_TIM_CD);
+	
     TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;
-    TIM_TimeBaseStructInit(&TIM_TimeBaseInitStructure);			//初始化默认结构体
+	TIM_TimeBaseStructInit(&TIM_TimeBaseInitStructure);			//初始化默认结构体
     TIM_TimeBaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
     TIM_TimeBaseInitStructure.TIM_CounterMode = TIM_CounterMode_Up;
-    TIM_TimeBaseInitStructure.TIM_Prescaler = 720-1;		//72M/720 = 100KHz
-    TIM_TimeBaseInitStructure.TIM_Period = 1000-1;		//72M/720/1000 = 100Hz = 0.01s
+	TIM_TimeBaseInitStructure.TIM_Prescaler = 720-1;
+    TIM_TimeBaseInitStructure.TIM_Period = 1000-1;
     TIM_TimeBaseInitStructure.TIM_RepetitionCounter = 0;
-
-    TIM_TimeBaseInit(timMOTOR_AB,&TIM_TimeBaseInitStructure);
-    TIM_TimeBaseInit(timMOTOR_CD,&TIM_TimeBaseInitStructure);
+	
+	TIM_TimeBaseInit(MOTOR_TIM_AB,&TIM_TimeBaseInitStructure);
+    TIM_TimeBaseInit(MOTOR_TIM_CD,&TIM_TimeBaseInitStructure);
 
     TIM_OCInitTypeDef TIM_OCInitStructure;
     TIM_OCStructInit(&TIM_OCInitStructure);						//初始化默认结构体
     TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
     TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
     TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
-    TIM_OCInitStructure.TIM_Pulse = 0;    //CCR
+    TIM_OCInitStructure.TIM_Pulse = 1000;    //CCR
+	
+	TIM_OC1Init(MOTOR_TIM_AB,&TIM_OCInitStructure);
+    TIM_OC2Init(MOTOR_TIM_AB,&TIM_OCInitStructure);
+    TIM_OC3Init(MOTOR_TIM_AB,&TIM_OCInitStructure);
+    TIM_OC4Init(MOTOR_TIM_AB,&TIM_OCInitStructure);
+	
+    TIM_OC1Init(MOTOR_TIM_CD,&TIM_OCInitStructure);
+    TIM_OC2Init(MOTOR_TIM_CD,&TIM_OCInitStructure);
+    TIM_OC3Init(MOTOR_TIM_CD,&TIM_OCInitStructure);
+    TIM_OC4Init(MOTOR_TIM_CD,&TIM_OCInitStructure);
+	
+	TIM_OC1PreloadConfig(MOTOR_TIM_AB, TIM_OCPreload_Enable);  //使能TIM2在CCR2上的预装载寄存器
+	TIM_OC2PreloadConfig(MOTOR_TIM_AB, TIM_OCPreload_Enable);  //使能TIM2在CCR2上的预装载寄存器
+	TIM_OC3PreloadConfig(MOTOR_TIM_AB, TIM_OCPreload_Enable);  //使能TIM2在CCR2上的预装载寄存器
+	TIM_OC4PreloadConfig(MOTOR_TIM_AB, TIM_OCPreload_Enable);  //使能TIM2在CCR2上的预装载寄存器
+	
+	TIM_OC1PreloadConfig(MOTOR_TIM_CD, TIM_OCPreload_Enable);
+	TIM_OC2PreloadConfig(MOTOR_TIM_CD, TIM_OCPreload_Enable);
+	TIM_OC3PreloadConfig(MOTOR_TIM_CD, TIM_OCPreload_Enable);
+	TIM_OC4PreloadConfig(MOTOR_TIM_CD, TIM_OCPreload_Enable);
 
-    TIM_OC1Init(timMOTOR_AB,&TIM_OCInitStructure);
-    TIM_OC2Init(timMOTOR_AB,&TIM_OCInitStructure);
-    TIM_OC3Init(timMOTOR_AB,&TIM_OCInitStructure);
-    TIM_OC4Init(timMOTOR_AB,&TIM_OCInitStructure);
-
-    TIM_OC1Init(timMOTOR_CD,&TIM_OCInitStructure);
-    TIM_OC2Init(timMOTOR_CD,&TIM_OCInitStructure);
-    TIM_OC3Init(timMOTOR_CD,&TIM_OCInitStructure);
-    TIM_OC4Init(timMOTOR_CD,&TIM_OCInitStructure);
-
-    TIM_OC1PreloadConfig(timMOTOR_AB, TIM_OCPreload_Enable);  //使能TIM2在CCR2上的预装载寄存器
-    TIM_OC2PreloadConfig(timMOTOR_AB, TIM_OCPreload_Enable);  //使能TIM2在CCR2上的预装载寄存器
-    TIM_OC3PreloadConfig(timMOTOR_AB, TIM_OCPreload_Enable);  //使能TIM2在CCR2上的预装载寄存器
-    TIM_OC4PreloadConfig(timMOTOR_AB, TIM_OCPreload_Enable);  //使能TIM2在CCR2上的预装载寄存器
-
-    TIM_OC1PreloadConfig(timMOTOR_CD, TIM_OCPreload_Enable);
-    TIM_OC2PreloadConfig(timMOTOR_CD, TIM_OCPreload_Enable);
-    TIM_OC3PreloadConfig(timMOTOR_CD, TIM_OCPreload_Enable);
-    TIM_OC4PreloadConfig(timMOTOR_CD, TIM_OCPreload_Enable);
-
-    TIM_Cmd(timMOTOR_AB,ENABLE);
-    TIM_Cmd(timMOTOR_CD,ENABLE);
+	TIM_Cmd(MOTOR_TIM_AB,ENABLE);
+    TIM_Cmd(MOTOR_TIM_CD,ENABLE);
 
 }
 
@@ -137,13 +142,13 @@ void MotorA_SetSpeed(uint8_t Dir, uint16_t Speed)
     if (Speed>=1000) Speed = 1000;
     if (Dir)
     {
-        TIM_SetCompare4(timMOTOR_AB,0);
-        TIM_SetCompare3(timMOTOR_AB,Speed);
+        TIM_SetCompare4(MOTOR_TIM_AB,0);
+        TIM_SetCompare3(MOTOR_TIM_AB,Speed);
     }
     else if (!Dir)
     {
-        TIM_SetCompare3(timMOTOR_AB,0);
-        TIM_SetCompare4(timMOTOR_AB,Speed);
+        TIM_SetCompare3(MOTOR_TIM_AB,0);
+        TIM_SetCompare4(MOTOR_TIM_AB,Speed);
     }
 }
 
@@ -156,13 +161,13 @@ void MotorB_SetSpeed(uint8_t Dir, uint16_t Speed)
     if (Speed>=1000) Speed = 1000;
     if (Dir)
     {
-        TIM_SetCompare2(timMOTOR_AB,0);
-        TIM_SetCompare1(timMOTOR_AB,Speed);
+        TIM_SetCompare2(MOTOR_TIM_AB,0);
+        TIM_SetCompare1(MOTOR_TIM_AB,Speed);
     }
     else if (!Dir)
     {
-        TIM_SetCompare1(timMOTOR_AB,0);
-        TIM_SetCompare2(timMOTOR_AB,Speed);
+        TIM_SetCompare1(MOTOR_TIM_AB,0);
+        TIM_SetCompare2(MOTOR_TIM_AB,Speed);
     }
 }
 
@@ -175,13 +180,13 @@ void MotorC_SetSpeed(uint8_t Dir, uint16_t Speed)
     if (Speed>=1000) Speed = 1000;
     if (Dir)
     {
-        TIM_SetCompare3(timMOTOR_CD,0);
-        TIM_SetCompare4(timMOTOR_CD,Speed);
+        TIM_SetCompare3(MOTOR_TIM_CD,0);
+        TIM_SetCompare4(MOTOR_TIM_CD,Speed);
     }
     else if (!Dir)
     {
-        TIM_SetCompare4(timMOTOR_CD,0);
-        TIM_SetCompare3(timMOTOR_CD,Speed);
+        TIM_SetCompare4(MOTOR_TIM_CD,0);
+        TIM_SetCompare3(MOTOR_TIM_CD,Speed);
     }
 }
 
@@ -194,12 +199,12 @@ void MotorD_SetSpeed(uint8_t Dir, uint16_t Speed)
     if (Speed>=1000) Speed = 1000;
     if (Dir)
     {
-        TIM_SetCompare1(timMOTOR_CD,0);
-        TIM_SetCompare2(timMOTOR_CD,Speed);
+        TIM_SetCompare1(MOTOR_TIM_CD,0);
+        TIM_SetCompare2(MOTOR_TIM_CD,Speed);
     }
     else if (!Dir)
     {
-        TIM_SetCompare2(timMOTOR_CD,0);
-        TIM_SetCompare1(timMOTOR_CD,Speed);
+        TIM_SetCompare2(MOTOR_TIM_CD,0);
+        TIM_SetCompare1(MOTOR_TIM_CD,Speed);
     }
 }
