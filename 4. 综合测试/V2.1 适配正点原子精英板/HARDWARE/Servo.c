@@ -68,3 +68,22 @@ void Servo_SetAngle(float Angle)
 {
     PWM_SetCompare1(Angle / 180 * 2000 + 500);
 }
+
+
+void initSG90(void)
+{
+    TIM_Cmd(SERVO_TIM, ENABLE);
+    Servo_SetAngle(90);
+}
+void sgMiddle(void)		//将舵机置为90度
+{
+    Servo_SetAngle(90);
+}
+void sgLeft(void)		//将舵机置为0度
+{
+    Servo_SetAngle(10);
+}
+void sgRight(void)		//将舵机置为180度
+{
+    Servo_SetAngle(170);
+}

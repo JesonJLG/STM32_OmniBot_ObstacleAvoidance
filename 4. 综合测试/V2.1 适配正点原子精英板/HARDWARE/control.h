@@ -33,7 +33,9 @@ void Follow_Mode(void);
 void Control(void);
 void motor_test(void);
 
+static void deal_dis(void);
 static void deal_dist(void);
+static void deal_dist2(void);
 
 #endif
 

@@ -1,6 +1,6 @@
 #include "countsensor.h"
 
-static uint16_t CountSensor_Count;
+int cnt;
 
 void CountSensor_Init(void)
 {
@@ -35,12 +35,12 @@ void CountSensor_Init(void)
 
 uint16_t CountSensor_Get(void)
 {
-    return CountSensor_Count;
+    return cnt;
 }
 
 void CountSensor_Clear(void)
 {
-    CountSensor_Count = 0;;
+    cnt = 0;;
 }
 
 void EXTI4_IRQHandler(void)
@@ -50,7 +50,7 @@ void EXTI4_IRQHandler(void)
         /*如果出现数据乱跳的现象，可再次判断引脚电平，以避免抖动*/
         if (GPIO_ReadInputDataBit(CNTSSR_PORT, CNTSSR_DO) == 0)
         {
-            CountSensor_Count ++;
+            cnt ++;
         }
         EXTI_ClearITPendingBit(CNTSSR_EXTI);
     }

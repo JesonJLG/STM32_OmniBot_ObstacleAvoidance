@@ -137,11 +137,11 @@ float Hcsr04GetLength(void)
         TRIG_Send = 0;
         while (ECHO_Reci == 0);	//该模块内部就会发出8个40kHz的周期电平并检测回波，ECHO_Reci=1即收到回波，退出while
         OpenTimerForHc();			//收到回波，立刻开始计时
-        i = i + 1;
+//        i = i + 1;
         while (ECHO_Reci == 1);	//等待回波结束
         CloseTimerForHc();		//结束停止定时器
         t = GetEchoTimer();		//获取TIM4内部计数器的值（每次计数耗时1us [72M/72]）
-        lengthTemp = ((float)t / 58.0);//lengthTemp：cm	t：us	lengthTemp = 340m/s*100/1000 000 * t / 2 = t/58.83
+        lengthTemp = ((float)t / 59.0);//lengthTemp：cm	t：us	lengthTemp = 340m/s*100/1000 000 * t / 2 = t/58.83
 //        sum = lengthTemp + sum;	//5次求和
     }
 //    lengthTemp = sum / 5.0;		//测5次取平均值 //严重影响检测速度 故取消

@@ -57,7 +57,7 @@ void Control(void)
 void Bluetooth_Mode(void)
 {
     if (mode_flag == 1)		    APP_Joy_Mode();		//APP摇杆模式
-//    else if (mode_flag == 2)	APP_Gravity_Mode();	//APP重力模式
+    else if (mode_flag == 2)	APP_Gravity_Mode();	//APP重力模式
     else if (mode_flag == 3)	Evadible_Mode();	//小车避障模式
     else if(mode_flag==4)		Follow_Mode();		//小车跟随模式
     else
@@ -207,7 +207,7 @@ void APP_Joy_Mode(void)
 ***************************************************/
 void Evadible_Mode(void)
 {
-    deal_dist();
+    deal_dist2();
 }
 
 /*------------摇头避障-------------*/
@@ -229,12 +229,12 @@ static void deal_dist(void)
 
         if (dist_right > dist_left) { //哪边距离大往哪边转
             Car_TurnRight(350);
-            delay_ms(300);//根据实际情况
+            delay_ms(500);//根据实际情况
             Car_Stop();
         }
         else {
             Car_TurnLeft(350);
-            delay_ms(300);//根据实际情况
+            delay_ms(500);//根据实际情况
             Car_Stop();
         }
     }
@@ -243,6 +243,58 @@ static void deal_dist(void)
         delay_ms(300);//根据实际情况
         Car_Stop();
     }
+
+}
+
+/*------------摇头避障2-------------*/
+static void deal_dist2(void)
+{
+    static char dir = MIDDLE;
+    static float disMiddle, disLeft, disRight;
+    if(dir != MIDDLE) {
+        sgMiddle();
+        dir = MIDDLE;
+        delay_ms(300);
+    }
+    disMiddle = Hcsr04GetLength();
+
+    if(disMiddle > 35) {
+        //前进
+        Car_Forward(400);
+    } else if(disMiddle < 10) {
+        Car_Backward(400);
+    } else
+    {
+        //停止
+        Car_Stop();
+        //测左边距离
+        sgLeft();
+        dir = LIFT;
+        delay_ms(300);
+        disLeft = Hcsr04GetLength();
+
+        sgMiddle();
+        delay_ms(300);
+
+        sgRight();
+        dir = RIGHT;
+        delay_ms(300);
+        disRight = Hcsr04GetLength();
+
+        if(disLeft < disRight) {
+            Car_TurnRight(400);
+            delay_ms(1000);
+            Car_Stop();
+        }
+        if(disRight < disLeft) {
+            Car_TurnLeft(400);
+            delay_ms(1000);
+            Car_Stop();
+        }
+    }
+    delay_ms(50);
+
+
 
 }
 
@@ -459,55 +511,44 @@ void APP_Gravity_Mode(void)
         if (pwm3 < -pwm_limit)	pwm3 = -pwm_limit;
         if (pwm4 < -pwm_limit)	pwm4 = -pwm_limit;
 
-
-
-        if (pwm1 >= 0)
+        /*------------左上轮B-------------*/
+        if (pwm1 >= 0)		//B轮正转
         {
-            //			TIM_SetCompare4(TIM2,500-pwm1);//L_BIN2:左上轮
-            //			L_BIN2_ON;
-
+            MotorB_SetSpeed(1, pwm1);
         }
-        else if (pwm1 < 0)
+        else if (pwm1 < 0)	//B轮反转
         {
-            //			pwm1=abs(pwm1);
-            //			TIM_SetCompare4(TIM2,pwm1);//L_BIN2:左上轮
-            //			L_BIN2_OFF;
+            MotorB_SetSpeed(0, -pwm1);
         }
 
+        /*------------右上轮C-------------*/
         if (pwm2 >= 0)
         {
-            //			TIM_SetCompare3(TIM2,pwm2);//L_AIN2:右上轮
-            //			L_AIN2_OFF;
+            MotorC_SetSpeed(1, pwm2);
         }
         else if (pwm2 < 0)
         {
-            //			pwm2=abs(pwm2);
-            //			TIM_SetCompare3(TIM2,500-pwm2);//L_AIN2:右上轮
-            //			L_AIN2_ON;
+            MotorC_SetSpeed(0, -pwm2);
         }
 
+        /*------------右下轮D-------------*/
         if (pwm3 >= 0)
         {
-            //			TIM_SetCompare1(TIM2,500-pwm3);//R_AIN2:右下轮
-            //			R_AIN2_ON;
+            MotorD_SetSpeed(1, pwm3);
         }
         else if (pwm3 < 0)
         {
-            //			pwm3=abs(pwm3);
-            //			TIM_SetCompare1(TIM2,pwm3);//R_AIN2:右下轮
-            //			R_AIN2_OFF;
+            MotorD_SetSpeed(0, -pwm3);
         }
 
+        /*------------左下轮A-------------*/
         if (pwm4 >= 0)
         {
-            //			TIM_SetCompare2(TIM2,pwm4);//R_BIN2:左下轮
-            //			R_BIN2_OFF;
+            MotorA_SetSpeed(1, pwm4);
         }
         else if (pwm4 < 0)
         {
-            //			pwm4=abs(pwm4);
-            //			TIM_SetCompare2(TIM2,500-pwm4);//R_BIN2:左下轮
-            //			R_BIN2_ON;
+            MotorA_SetSpeed(0, -pwm4);
         }
 
         memset(Smoothing_Pitch_Buf, 0, sizeof(Smoothing_Pitch_Buf));

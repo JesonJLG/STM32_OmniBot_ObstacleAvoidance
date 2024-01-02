@@ -33,7 +33,7 @@ STBY1:PB4    STBY2:PB9
 //extern char Pwm_RxPacket[20];	//"P[...]\r\n"	Pwm_RxPacket[0]为pwm_limit
 u8 t;
 u8 temperature, humidity;
-int cnt;				//对射红外外部中断次数
+extern int cnt;				//对射红外外部中断次数
 int girdCount = 20;		//码盘格子数
 float lap;				//轮子圈数
 float perimeter = 8.1;	//轮子周长 2.575cm * 3.14 ≈ 8.1cm
@@ -61,7 +61,7 @@ int main(void)
 	Servo_SetAngle(90);
 	OLED_ShowString(1, 1, "Temp:00");
 	OLED_ShowString(2, 1, "Humi:00");
-	OLED_ShowString(3, 1, "cnt:00");
+	OLED_ShowString(3, 1, "lap:00");
 	printf("123\r\n");
 	
 	
@@ -75,14 +75,14 @@ int main(void)
 	while (1) 
 	{
 		Control();
-		analyzeIRSensorData_1s();
+		//analyzeIRSensorData_1s();
 		if (t % 10 == 0)			//每100ms读取一次
 		{
 			DHT11_Read_Data(&temperature, &humidity);	//读取温湿度值
-			cnt = CountSensor_Get();
+//			cnt = CountSensor_Get();
 			OLED_ShowNum(1, 6, temperature, 2);
 			OLED_ShowNum(2, 6, humidity, 2);
-			OLED_ShowNum(3, 6, cnt, 2);
+//			OLED_ShowNum(3, 6, cnt, 2);
 //			printf("temperature:%d\t", temperature);
 //			printf("humidity:%d\t", humidity);
 //			printf("cnt:%d\r\n", cnt);
@@ -103,12 +103,14 @@ int main(void)
 
 void analyzeIRSensorData_1s(void) 
 {
-	if(time >= 50)//20ms*50 = 1000ms = 1s
+	if(time == 50)//20ms*50 = 1000ms = 1s
 	{
 		time = 0;
-		lap = (float)cnt / girdCount;	//多少圈
+		lap = cnt / (float)girdCount;	//多少圈
 		speed = lap * perimeter;		//速度cm/s
-		CountSensor_Clear();
+//		CountSensor_Clear();
+		cnt = 0;						//中断次数
+		OLED_ShowNum(3, 6, lap, 2);
 		Serial_Printf("*D%.2f*", speed);
 //		Serial_Printf("*D1*");			//test
 	}
@@ -120,7 +122,7 @@ void TIM1_UP_IRQHandler(void)
 	if (TIM_GetITStatus(TIM1, TIM_IT_Update) == SET)
 	{
 		time ++;
-//		analyzeIRSensorData_1s();
+		analyzeIRSensorData_1s();
 		TIM_ClearITPendingBit(TIM1, TIM_IT_Update);
 	}
 }
