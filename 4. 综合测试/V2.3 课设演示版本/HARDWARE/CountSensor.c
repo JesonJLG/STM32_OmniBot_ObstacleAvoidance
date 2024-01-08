@@ -4,16 +4,19 @@ int cnt;
 
 void CountSensor_Init(void)
 {
+	/*------------RCC-------------*/
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
     GPIO_PinRemapConfig(GPIO_Remap_SWJ_NoJTRST, ENABLE);
 
+	/*------------GPIO-------------*/
     GPIO_InitTypeDef GPIO_InitStructure;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
     GPIO_InitStructure.GPIO_Pin = CNTSSR_DO;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(CNTSSR_PORT, &GPIO_InitStructure);
 
+	/*------------EXTI-------------*/
     GPIO_EXTILineConfig(GPIO_PortSourceGPIOB, GPIO_PinSource4);
 
     EXTI_InitTypeDef EXTI_InitStructure;
@@ -23,6 +26,7 @@ void CountSensor_Init(void)
     EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling;
     EXTI_Init(&EXTI_InitStructure);
 
+	/*------------NVIC-------------*/
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
 
     NVIC_InitTypeDef NVIC_InitStructure;

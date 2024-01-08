@@ -24,24 +24,25 @@ void Serial_Init(u32 bound)
     USART_InitTypeDef USART_InitStructure;
     NVIC_InitTypeDef NVIC_InitStructure;
 
+	/*------------RCC时钟使能-------------*/
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
-
-    GPIO_InitStructure.GPIO_Pin = USART_TX;
+	/*------------GPIO配置及初始化-------------*/
+    GPIO_InitStructure.GPIO_Pin = USART_TX;		//PB10
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;			//复用推挽输出
     GPIO_Init(USART_PORT, &GPIO_InitStructure);
-
-    GPIO_InitStructure.GPIO_Pin = USART_RX;
+	
+    GPIO_InitStructure.GPIO_Pin = USART_RX;		//PB11
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;	//浮空输入
     GPIO_Init(USART_PORT, &GPIO_InitStructure);
-
+	/*------------NVIC嵌套向量中断控制器 配置及初始化-------------*/
     NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
-
+	/*------------USART配置及初始化-------------*/
     USART_InitStructure.USART_BaudRate = bound;						//串口波特率
     USART_InitStructure.USART_WordLength = USART_WordLength_8b;		//字长为8位数据格式
     USART_InitStructure.USART_StopBits = USART_StopBits_1;		 	//一个停止位
@@ -49,13 +50,13 @@ void Serial_Init(u32 bound)
     USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;//无硬件数据流控制
     USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;	//收发模式
 
-    USART_Init(USARTX, &USART_InitStructure);     //初始化串口2
+    USART_Init(USARTX, &USART_InitStructure);     //初始化串口3
 //    USART_ITConfig(USARTX, USART_IT_RXNE, ENABLE);//开启串口接受中断
-    USART_Cmd(USARTX, ENABLE);                    //使能串口2
+    USART_Cmd(USARTX, ENABLE);                    //使能串口3
 }
 
 /**************************************************
-函数名称：USART2_IRQHandler(void)
+函数名称：USART3_IRQHandler(void)
 函数功能：串口2中断函数	进行蓝牙串口数据的解析
 （主要就是 进行组帧操作 将遥控端发来的遥控数据 解析保存到三个全局共享数组变量Lr_RxPacket[10]、Rr_RxPacket[10]、Pitch_Roll_RxPacket[20]中）
 入口参数：无
@@ -68,60 +69,35 @@ void USART3_IRQHandler(void)
     static char Lr_RxBuf[10], Rr_RxBuf[10], Pitch_Roll_RxBuf[20],Pwm_RxBuf[10];	//用于组帧
     static char Lr_index, Rr_index, Pr_index, Pwm_index;	//数组索引（下标）	用于组帧
 
-    if (USART_GetITStatus(USARTX, USART_IT_RXNE) != RESET)
+    if (USART_GetITStatus(USARTX, USART_IT_RXNE) != RESET)	//有收到数据
     {
         /*------------标志位的赋值-------------*/
         RxData = USART_ReceiveData(USARTX);
-        //USART_SendData(USART1, RxData);
-        if (RxData == 'a')
+        //USART_SendData(USART1, RxData);	//用于调试
+        if (RxData == 'a')		//当前接受到'a'
         {
-            mode_flag = 1;
-            BEEP_Tick();
+            mode_flag = 1;		//APP摇杆模式（小车可在左右摇杆的组合操作下进行全向运动）
+            BEEP_Tick();		//蜂鸣反馈响一声
 
         }
-        else if (RxData == 'b')
+        else if (RxData == 'b')	//当前接受到'b'
         {
-            mode_flag = 2;	//重力感应模式(手机遥控APP可以实现)
+            mode_flag = 2;		//APP重力模式(借助手机陀螺仪来遥控小车运动)
             BEEP_Tick();
 
         }
         else if (RxData == 'c')
         {
-            mode_flag = 3;
+            mode_flag = 3;		//小车避障模式
             BEEP_Tick();
 
         }
         else if (RxData == 'd')
         {
-            mode_flag = 4;
+            mode_flag = 4;		//小车跟随模式
             BEEP_Tick();
 
         }
-        else if (RxData == 'e')
-        {
-            mode_flag = 5;
-            BEEP_Tick();
-
-        }
-        else if (RxData == 'f')
-        {
-            mode_flag = 6;
-            BEEP_Tick();
-
-        }
-        else if (RxData == 'g')
-        {
-            mode_flag = 7;
-            BEEP_Tick();
-
-        }
-
-        /*------------标志位的处理-------------*/
-//        if (t == 0 && mode_flag == 4)	//过滤（全局？）第一次mode_flag=4
-//        {
-//            mode_flag = 0;				//这里通过重置mode_flag标志位，实现一个“过滤”的效果
-//            t = 1;						//同时计次做标记(后面不清0?)
-//        }
 
         /*------------处理遥控模式下的遥杆数据（分类打包）-------------*/
         if (mode_flag != 2)				//当模式不为重力感应模式时(即遥控模式)
@@ -208,7 +184,7 @@ void USART3_IRQHandler(void)
             {
                 Pitch_Roll_RxBuf[Pr_index] = RxData;
                 Pr_index++;
-                if (RxData == '*')
+                if (RxData == '*')	//帧尾
                 {
                     strcpy(Pitch_Roll_RxPacket, Pitch_Roll_RxBuf);
                     Pr_RxFlag = 0;

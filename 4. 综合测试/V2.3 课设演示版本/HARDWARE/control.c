@@ -88,7 +88,7 @@ void APP_Joy_Mode(void)
 //    printf("Pwm_RxPacket[4]:%c\t", Pwm_RxPacket[4]);
 //    printf("Pwm_RxPacket[5]:%c\t", Pwm_RxPacket[5]);
 //    printf("\r\n");
-	sgReset();
+	sgReset();					//舵机复位
 	
     if (Pwm_RxPacket[0] == 'P')
     {   //"P999*"
@@ -117,6 +117,13 @@ void APP_Joy_Mode(void)
     Map_Ly = Map(Joy_Ly, 10, 90, -127, 127);
     Map_Rx = Map(Joy_Rx, 10, 90, -127, 127);
     Map_Ry = Map(Joy_Ry, 10, 90, -127, 127);
+	
+	/***************另一种思路*****************
+    Map_Lx = Map(Joy_Lx, 10, 90, -1000, 1000);
+    Map_Ly = Map(Joy_Ly, 10, 90, -1000, 1000);
+    Map_Rx = Map(Joy_Rx, 10, 90, -1000, 1000);
+    Map_Ry = Map(Joy_Ry, 10, 90, -1000, 1000);
+    *************************************/
     /*
         对于小车，坐标系为X轴向右为正，Y轴向下为正，yaw轴顺时针为正（由摇杆数据增长方向决定）
         Motor Mapping:
@@ -129,6 +136,13 @@ void APP_Joy_Mode(void)
     pwm2 = -Map_Ly - Map_Lx - Map_Ry - Map_Rx;	//MotorC
     pwm3 = -Map_Ly + Map_Lx - Map_Ry - Map_Rx;	//MotorD
     pwm4 = -Map_Ly - Map_Lx - Map_Ry + Map_Rx;	//MotorA
+	
+	/***************同上*****************
+	pwmA = -(Map_Ly+Map_Ry) -Map_Lx +Map_Rx
+	pwmB = -(Map_Ly+Map_Ry) +Map_Lx +Map_Rx
+	pwmC = -(Map_Ly+Map_Ry) -Map_Lx -Map_Rx
+	pwmD = -(Map_Ly+Map_Ry) +Map_Lx -Map_Rx
+	*************************************/	
 
     /*------------映射至PWM占空比范围-------------*/
     pwm1 = Map(pwm1, -127, 127, -1000, 1000);
@@ -171,11 +185,11 @@ void APP_Joy_Mode(void)
     }
 
     /*------------右上轮C-------------*/
-    if (pwm2 >= 0)
+    if (pwm2 >= 0)		//C轮正转
     {
         MotorC_SetSpeed(1, pwm2);
     }
-    else if (pwm2 < 0)
+    else if (pwm2 < 0)	//C轮正转
     {
         MotorC_SetSpeed(0, -pwm2);
     }
@@ -266,7 +280,7 @@ static void deal_dist2(void)
         Car_Backward(400);
         delay_ms(400);
     }
-    else
+    else	//前方距离处于15~35cm范围的警告距离，左转或右转
     {
         Car_Stop();		//停止
         /*------------测左边-------------*/
@@ -432,9 +446,9 @@ void APP_Gravity_Mode(void)
     //提取Roll
     for (i = 1; i < 20; i++)
     {
-        if (Pitch_Roll_RxPacket[i] == '.')break;
+        if (Pitch_Roll_RxPacket[i] == '.')break;	//忽略‘.’
         Roll_Buf[i - 1] = Pitch_Roll_RxPacket[i];
-    }
+    }	
     //提取Pitch
     for (i = 0; i < 20; i++)
     {
