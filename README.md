@@ -26,14 +26,14 @@
 
 手机APP遥控界面展示：
 
-![界面概览](D:\Users\JESON\Desktop\课设\基于stm32的麦轮避障小车设计\README.assets\界面概览.jpg)
+<img src="./README.assets/界面概览.jpg" alt="界面概览" style="zoom: 25%;" />
 
-小车实物展示：
+实物展示：
 
 （后期测试中因误操作不慎将stm32f103c8t6最小系统板烧了，这里换用正点原子的stm32f103zet6精英板作为候补，各模块引脚均采用宏定义，故简单改动宏定义引脚即可成功移植到精英板，接线会比较麻烦）
 
-![小车 全](D:\Users\JESON\Desktop\课设\基于stm32的麦轮避障小车设计\README.assets\小车 全.jpg)
+<img src="./README.assets/小车 全.jpg" alt="小车 全" style="zoom:25%;" />
 
-![小车 近](D:\Users\JESON\Desktop\课设\基于stm32的麦轮避障小车设计\README.assets\小车 近.jpg)
+<img src="./README.assets/小车 近.jpg" alt="小车 近" style="zoom:25%;" />
 
-![小车 俯](D:\Users\JESON\Desktop\课设\基于stm32的麦轮避障小车设计\README.assets\小车 俯.jpg)
+<img src="./README.assets/小车 俯.jpg" alt="小车 俯" style="zoom:25%;" />
