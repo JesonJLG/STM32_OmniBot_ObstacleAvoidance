@@ -39,13 +39,13 @@ int main(void)
 	BEEP_Init();
 	BEEP_Ring();
 	
-	Wait_BT_CONNECTED();
+	//Wait_BT_CONNECTED();
 
 	while (1)
 	{
 		//printf("11111\r\n");
-		Control();
-		//Hcsr04_Text();
+		//Control();
+		Hcsr04_Text();
 	}
 }
 
